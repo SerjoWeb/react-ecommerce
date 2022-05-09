@@ -1,0 +1,28 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "title": "TV Sharp ME-2022",
+      "desc": "Pretty wide and easy in use TV.",
+      "price": 15,
+      "priceRub": 0,
+      "count": 5
+    },
+    {
+      "id": 2,
+      "title": "TV Panasonic PS E 2019",
+      "desc": "A huge TV, best for XBOX Playing.",
+      "price": 25,
+      "priceRub": 0,
+      "count": 2
+    },
+    {
+      "id": 3,
+      "title": "TV Supra Home studio",
+      "desc": "Family TV for watching movies.",
+      "price": 12,
+      "priceRub": 0,
+      "count": 7
+    }
+  ]
+}
