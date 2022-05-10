@@ -7,14 +7,13 @@ import axios from 'axios';
 
 /** Firebase config */
 const firebaseConfig: any = {
-  apiKey: 'AIzaSyBtULdFqjdKc7ljvX3nVM6Z3U-EQ-0p-vs',
-  authDomain: 'e-commerce-92778.firebaseapp.com',
-  databaseURL: 'https://e-commerce-92778-default-rtdb.asia-southeast1.firebasedatabase.app',
-  projectId: 'e-commerce-92778',
-  storageBucket: 'e-commerce-92778.appspot.com',
-  messagingSenderId: '1079978473827',
-  appId: '1:1079978473827:web:da3ad24e04a9cfd5737b56',
-  measurementId: 'G-FPT03WGZDM'
+  apiKey: "AIzaSyBuxrMxC-HoQfuHkJzOYn78eLEm5QjwNKU",
+  authDomain: "e-commerce-7f174.firebaseapp.com",
+  projectId: "e-commerce-7f174",
+  storageBucket: "e-commerce-7f174.appspot.com",
+  messagingSenderId: "1079602433649",
+  appId: "1:1079602433649:web:8ce879e0b94249808bd5d0",
+  measurementId: "G-V0859364WH"
 };
 
 /** Init firebase */
