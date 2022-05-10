@@ -12,7 +12,17 @@ import useStore from '../Stores/useStore';
 /** Init Products Component */
 const Products: any = () => {
   /** Init Products Store */
-  const { products, users, addUser, setUsers, setProducts, addToCartDB, removeFromCartDB, getCartProducts, productsInCart } = useStore((state) => state);
+  const {
+    products,
+    users,
+    addUser,
+    setUsers,
+    setProducts,
+    addToCartDB,
+    removeFromCartDB,
+    getCartProducts,
+    productsInCart
+  } = useStore((state) => state);
 
   /** Init States */
   const [isFetching, setIsFetching] = useState(false);
@@ -63,45 +73,41 @@ const Products: any = () => {
   };
 
   /** Delete from cart */
-  const deleteFromCart: any = ((product: any) => {
+  const deleteFromCart: any = (product: any) => {
     if (localStorage.getItem('ECommerce-user')) {
       const user: any = localStorage.getItem('ECommerce-user');
       const parseUser: any = JSON.parse(user)[0];
-      removeFromCartDB(product, parseUser); 
+      removeFromCartDB(product, parseUser);
     }
-  });
+  };
 
   return (
     <div className="mt-[30px] w-full">
       {!isFetching ? (
-        <ProductList
-          addToCart={addToCart}
-          deleteFromCart={deleteFromCart}
-          products={products}
-        />
+        <ProductList addToCart={addToCart} deleteFromCart={deleteFromCart} products={products} />
       ) : (
         <Loader />
       )}
-      {
-        !auth && !auth2 && !localStorage.getItem('ECommerce-user') ? (
-          <LocalStorageNotify
-            setAuth={addUserDB}
-            text="Hello, we glad to greeting you. To start buying online through our shop, please, click the button - I'm Agree. We guarantee that we are not process your data."
-            btnLabel="I'm Agree"
-            btnName="auth-db"
-          />
-        ) : ''
-      }
-      {
-        auth && !auth2 && !localStorage.getItem('ECommerce-user') ? (
-          <LocalStorageNotify
-            setAuth={authDone}
-            text="All Done! Happy Shopping :)"
-            btnLabel="Ok"
-            btnName="auth-ok"
-          />
-        ) : ''
-      }
+      {!auth && !auth2 && !localStorage.getItem('ECommerce-user') ? (
+        <LocalStorageNotify
+          setAuth={addUserDB}
+          text="Hello, we glad to greeting you. To start buying online through our shop, please, click the button - I'm Agree. We guarantee that we are not process your data."
+          btnLabel="I'm Agree"
+          btnName="auth-db"
+        />
+      ) : (
+        ''
+      )}
+      {auth && !auth2 && !localStorage.getItem('ECommerce-user') ? (
+        <LocalStorageNotify
+          setAuth={authDone}
+          text="All Done! Happy Shopping :)"
+          btnLabel="Ok"
+          btnName="auth-ok"
+        />
+      ) : (
+        ''
+      )}
     </div>
   );
 };

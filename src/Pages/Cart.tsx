@@ -16,7 +16,9 @@ import useProducts from '../Stores/useStore';
 /** Init Cart component */
 const Cart: any = () => {
   /** Init Products Store */
-  const { productsInCart, getCartProducts, removeFromCartDB } = useProducts((state) => state);
+  const { productsInCart, getCartProducts, removeFromCartDB, applyPayment } = useProducts(
+    (state) => state
+  );
 
   /** Init prices state */
   const [rubTotal, setRubTotal] = useState(0);
@@ -39,7 +41,7 @@ const Cart: any = () => {
 
       productsInCart.map((productInCart: any) => {
         _rubTotal += productInCart.priceRub;
-        _usdTotal += productInCart.price
+        _usdTotal += productInCart.price;
 
         setRubTotal(_rubTotal);
         setUsdTotal(_usdTotal);
@@ -48,24 +50,24 @@ const Cart: any = () => {
   }, [productsInCart]);
 
   /** Delete from cart */
-  const deleteFromCart: any = ((product: any) => {
+  const deleteFromCart: any = (product: any) => {
     if (localStorage.getItem('ECommerce-user')) {
       const user: any = localStorage.getItem('ECommerce-user');
       const parseUser: any = JSON.parse(user)[0];
-      removeFromCartDB(product, parseUser); 
+      removeFromCartDB(product, parseUser);
     }
-  });
+  };
 
   /** payment */
   const paymentHandle: any = () => {
     if (localStorage.getItem('ECommerce-user')) {
       const user: any = localStorage.getItem('ECommerce-user');
       const parseUser: any = JSON.parse(user)[0];
-      
+
       if (productsInCart.length) {
         productsInCart.map((productInCart: any) => {
-          if (productInCart.count  >= 1) {
-            removeFromCartDB(productInCart, parseUser);
+          if (productInCart.count >= 1) {
+            applyPayment(productsInCart, parseUser);
           }
         });
 
@@ -82,37 +84,37 @@ const Cart: any = () => {
     <div className="mt-[30px] w-full">
       <div className="w-full flex justify-between items-center">
         <Breadcrumbs />
-        {
-          productsInCart.length ? (
-            <Button
-              type="button"
-              name="payment"
-              content={`Payment: $${usdTotal} (${rubTotal} rub)`}
-              classProps="bg-[#449954] hover:bg-[#58C16C]"
-              buttonHandler={paymentHandle}
-              disabled={false}
-              product={false}
-            />
-          ) : ''
-        }
-      </div>  
+        {productsInCart.length ? (
+          <Button
+            type="button"
+            name="payment"
+            content={`Payment: $${usdTotal} (${rubTotal} rub)`}
+            classProps="bg-[#449954] hover:bg-[#58C16C]"
+            buttonHandler={paymentHandle}
+            disabled={false}
+            product={false}
+          />
+        ) : (
+          ''
+        )}
+      </div>
       <div className="mt-[30px] w-full">
         <ProductList
           addToCart={() => false}
           deleteFromCart={deleteFromCart}
           products={productsInCart}
         />
-        {
-          payment ? (
-            <LocalStorageNotify
-              setAuth={paymentDone}
-              text="Thank's for buying our products! Have a great day!"
-              btnLabel="Ok"
-              btnName="payment-ok"
-            />
-          ) : ''
-        }
-    </div>
+        {payment ? (
+          <LocalStorageNotify
+            setAuth={paymentDone}
+            text="Thank's for buying our products! Have a great day!"
+            btnLabel="Ok"
+            btnName="payment-ok"
+          />
+        ) : (
+          ''
+        )}
+      </div>
     </div>
   );
 };

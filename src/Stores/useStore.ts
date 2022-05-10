@@ -1,19 +1,32 @@
 /** Firebase import */
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs, doc, updateDoc, addDoc, arrayUnion, arrayRemove, getDoc, onSnapshot, query, orderBy } from 'firebase/firestore';
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  doc,
+  updateDoc,
+  addDoc,
+  arrayUnion,
+  arrayRemove,
+  getDoc,
+  onSnapshot,
+  query,
+  orderBy
+} from 'firebase/firestore';
 
 // Import axios
 import axios from 'axios';
 
 /** Firebase config */
 const firebaseConfig: any = {
-  apiKey: "AIzaSyBuxrMxC-HoQfuHkJzOYn78eLEm5QjwNKU",
-  authDomain: "e-commerce-7f174.firebaseapp.com",
-  projectId: "e-commerce-7f174",
-  storageBucket: "e-commerce-7f174.appspot.com",
-  messagingSenderId: "1079602433649",
-  appId: "1:1079602433649:web:8ce879e0b94249808bd5d0",
-  measurementId: "G-V0859364WH"
+  apiKey: 'AIzaSyBuxrMxC-HoQfuHkJzOYn78eLEm5QjwNKU',
+  authDomain: 'e-commerce-7f174.firebaseapp.com',
+  projectId: 'e-commerce-7f174',
+  storageBucket: 'e-commerce-7f174.appspot.com',
+  messagingSenderId: '1079602433649',
+  appId: '1:1079602433649:web:8ce879e0b94249808bd5d0',
+  measurementId: 'G-V0859364WH'
 };
 
 /** Init firebase */
@@ -35,13 +48,13 @@ interface Products {
   price: number;
   priceRub: number;
   count: number;
-};
+}
 
 /** Interface for users */
 interface Users {
   uid: string;
   products: any;
-};
+}
 
 // init interface for Products store
 interface Store {
@@ -53,8 +66,9 @@ interface Store {
   setProducts: () => void;
   getCartProducts: (user: any) => void;
   addToCartDB: (product: any, user: any) => void;
-  removeFromCartDB: (product: any, user:any) => void;
-};
+  removeFromCartDB: (product: any, user: any) => void;
+  applyPayment: (products: any, user: any) => void;
+}
 
 /** Create Products Store */
 const useStore = create<Store>((set, get) => ({
@@ -63,7 +77,7 @@ const useStore = create<Store>((set, get) => ({
   users: [] as any,
   setUsers: async () => {
     const data: any = await getDocs(colRefUsers);
-    const users: any = data.docs.map((doc: any, index: number) => ({...doc.data()}));
+    const users: any = data.docs.map((doc: any, index: number) => ({ ...doc.data() }));
 
     set({
       users: users
@@ -106,25 +120,24 @@ const useStore = create<Store>((set, get) => ({
 
     const result: any = await Promise.all(promises).then(() => convertedPrices);
     const products: any = data.docs.map((doc: any, index: number) => {
-      
       updateDoc(doc.ref, {
         priceRub: result[index].RUB,
         uid: doc.id
       });
-      
-      return {...doc.data()}
+
+      return { ...doc.data() };
     });
 
     set({
       products: products
     });
   },
-  getCartProducts: async(user: any) => {
+  getCartProducts: async (user: any) => {
     /** user */
     const docRefU: any = doc(db, 'users', user.uid);
     const dataUser: any = await getDoc(docRefU);
     const userProducts: any = dataUser.data().products;
-    
+
     /** products */
     const data: any = await getDocs(colRefProducts);
     const products: any = data.docs;
@@ -159,7 +172,7 @@ const useStore = create<Store>((set, get) => ({
     });
 
     const data: any = await getDocs(colRefProducts);
-    const products: any = data.docs.map((doc: any, index: number) => ({...doc.data()}));
+    const products: any = data.docs.map((doc: any, index: number) => ({ ...doc.data() }));
 
     set({
       products: products
@@ -174,7 +187,7 @@ const useStore = create<Store>((set, get) => ({
     });
 
     const data: any = await getDocs(colRefProducts);
-    const products: any = data.docs.map((doc: any, index: number) => ({...doc.data()}));
+    const products: any = data.docs.map((doc: any, index: number) => ({ ...doc.data() }));
 
     set({
       products: products
@@ -184,7 +197,9 @@ const useStore = create<Store>((set, get) => ({
     const docRefU: any = doc(db, 'users', user.uid);
     const dataUser: any = await getDoc(docRefU);
     const userProducts: any = dataUser.data().products;
-    const deleteProductFromCart: any = userProducts.filter((userProduct: any) => userProduct !== product.uid);
+    const deleteProductFromCart: any = userProducts.filter(
+      (userProduct: any) => userProduct !== product.uid
+    );
 
     updateDoc(docRefU, {
       products: deleteProductFromCart
@@ -192,6 +207,17 @@ const useStore = create<Store>((set, get) => ({
 
     set({
       productsInCart: deleteProductFromCart
+    });
+  },
+  applyPayment: (products: any, user: any) => {
+    const docRefU: any = doc(db, 'users', user.uid);
+
+    updateDoc(docRefU, {
+      products: []
+    });
+
+    set({
+      productsInCart: []
     });
   }
 }));

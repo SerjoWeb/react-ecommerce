@@ -27,10 +27,12 @@ const ProductCard: any = ({
   const [inCart, setInCart] = useState(false);
 
   useEffect(() => {
-    const productCheck: any = productsInCart.filter((productInCart: any) => productInCart.uid === product.uid);
+    const productCheck: any = productsInCart.filter(
+      (productInCart: any) => productInCart.uid === product.uid
+    );
     productCheck.length ? setInCart(true) : setInCart(false);
   }, [productsInCart]);
-  
+
   return (
     <>
       {product ? (
@@ -66,7 +68,9 @@ const ProductCard: any = ({
                   disabled={false}
                   product={product}
                 />
-              ) : ''}
+              ) : (
+                ''
+              )}
               {inCart ? (
                 <Button
                   type="button"
@@ -77,7 +81,9 @@ const ProductCard: any = ({
                   disabled={false}
                   product={product}
                 />
-              ) : ''}
+              ) : (
+                ''
+              )}
             </div>
           )}
         </div>
